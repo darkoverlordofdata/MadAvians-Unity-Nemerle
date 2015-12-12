@@ -1,0 +1,123 @@
+#pragma indent
+
+using System
+using UnityEngine
+
+namespace HelloWorld 
+
+    public class ProjectileDragging : MonoBehaviour 
+    
+        public mutable maxStretch:float = 3.0f
+
+        public mutable catapultLineFront: LineRenderer
+        public mutable catapultLineBack: LineRenderer
+
+        private mutable spring: SpringJoint2D;
+        private mutable catapult: Transform
+        private mutable rayToMouse: Ray
+        private mutable leftCatapultToProjectile: Ray
+        private mutable maxStretchSqr: float
+        private mutable circleRadius: float
+        private mutable clickedOn: bool
+        private mutable prevVelocity: Vector2
+        
+        public Awake():void
+            spring = GetComponent():SpringJoint2D
+            catapult = spring.connectedBody.transform
+        
+        public Start():void
+            LineRendererSetup()
+            rayToMouse = Ray(catapult.position, Vector3.zero)
+            leftCatapultToProjectile = Ray(catapultLineFront.transform.position, Vector3.zero)
+            maxStretchSqr = maxStretch * maxStretch
+            def circle:CircleCollider2D = (GetComponent():Collider2D):>CircleCollider2D
+            circleRadius = circle.radius
+            Debug.Log(string.Format("maxStretchSqr = {0}, circleRadius = {1}", maxStretchSqr, circleRadius))
+            
+        public Update():void
+            when (clickedOn) Dragging()
+           
+            if (spring != null)
+            
+                when (!(GetComponent():Rigidbody2D).isKinematic && prevVelocity.sqrMagnitude > (GetComponent():Rigidbody2D).velocity.sqrMagnitude)
+                    Destroy(spring)
+                    (GetComponent():Rigidbody2D).velocity = prevVelocity
+                    
+                when (clickedOn != true)
+                    prevVelocity = (GetComponent():Rigidbody2D).velocity
+                    
+                LineRendererUpdate()
+
+            else
+                catapultLineFront.enabled = false
+                catapultLineBack.enabled = false
+            
+     
+        public LineRendererSetup():void
+            catapultLineFront.SetPosition(0, catapultLineFront.transform.position)
+            catapultLineBack.SetPosition(0, catapultLineBack.transform.position)
+            
+            catapultLineFront.sortingLayerName = "Foreground"
+            catapultLineBack.sortingLayerName = "Foreground"
+            
+            catapultLineFront.sortingOrder = 3
+            catapultLineBack.sortingOrder = 1
+        
+        public OnEnable():void
+            // Subcribe to events when object is enabled
+            TouchManager.OnTouchDown += OnTouchDown
+            TouchManager.OnTouchUp += OnTouchUp
+            TouchManager.OnTouchDrag += OnTouchDrag
+        
+        public OnDisable():void
+            // Unsubcribe from events when object is disabled
+            TouchManager.OnTouchDown -= OnTouchDown
+            TouchManager.OnTouchUp -= OnTouchUp
+            TouchManager.OnTouchDrag -= OnTouchDrag
+        
+        private OnTouchDown(eventData:Touch):void
+            OnMouseDown()
+        
+        
+        private OnTouchUp(eventData:Touch):void
+            OnMouseUp
+        
+        
+        private OnTouchDrag(eventData:Touch):void   
+            Debug.Log("OnTouchDrag");
+        
+        public OnMouseDown():void
+            spring.enabled = false
+            clickedOn = true
+        
+        
+        public OnMouseUp():void
+            spring.enabled = true
+            (GetComponent():Rigidbody2D).isKinematic = false
+            clickedOn = false
+        
+        
+        
+        public Dragging():void
+            mutable mouseWorldPoint:Vector3 = Camera.main.ScreenToWorldPoint(Input.mousePosition)
+            mutable catapultToMouse:Vector2 = mouseWorldPoint - catapult.position            
+            //Debug.Log(string.Format("catapultToMouse = {0},{1}", catapultToMouse.x, catapultToMouse.y))
+            
+            when (catapultToMouse.sqrMagnitude > maxStretchSqr)
+                //Debug.Log("rayToMouse")
+                rayToMouse.direction = catapultToMouse
+                mouseWorldPoint = rayToMouse.GetPoint(maxStretch)
+            
+            mouseWorldPoint.z = 0f
+            transform.position = mouseWorldPoint
+
+            
+        public LineRendererUpdate():void
+            mutable catapultToProjectile:Vector2 = transform.position - catapultLineFront.transform.position
+            leftCatapultToProjectile.direction = catapultToProjectile
+            mutable holdPoint:Vector3 = leftCatapultToProjectile.GetPoint(catapultToProjectile.magnitude + circleRadius)
+            catapultLineFront.SetPosition(1, holdPoint)
+            catapultLineBack.SetPosition(1, holdPoint)
+
+
+        

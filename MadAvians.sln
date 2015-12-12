@@ -1,0 +1,16 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{A22CEFA3-3A07-DC3A-90A9-5208ECCAAF27}") = "MadAvians", "Assembly-CSharp-Editor.csproj", "{F175B6BF-40AF-CE4D-ACD5-9EAC64C733FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F175B6BF-40AF-CE4D-ACD5-9EAC64C733FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F175B6BF-40AF-CE4D-ACD5-9EAC64C733FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F175B6BF-40AF-CE4D-ACD5-9EAC64C733FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F175B6BF-40AF-CE4D-ACD5-9EAC64C733FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

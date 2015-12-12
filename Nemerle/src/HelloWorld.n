@@ -1,0 +1,16 @@
+#pragma indent
+
+using System
+using UnityEngine
+
+namespace HelloWorld 
+
+    public class HelloWorldClass : MonoBehaviour 
+
+        private _version:string = "42"
+        
+        public Version : string 
+            get _version
+
+        public Start():void 
+            Debug.Log("Hello from Nemerle: v"+Version)

@@ -1,0 +1,28 @@
+#pragma indent
+
+using System
+using UnityEngine
+
+namespace HelloWorld 
+
+    public class ProjectileFollow : MonoBehaviour 
+    
+        // The transform of the projectile to follow.
+        public mutable projectile:Transform 
+        // The transform representing the left bound of the camera's position.
+        public mutable farLeft: Transform
+        // The transform representing the right bound of the camera's position.
+        public mutable farRight: Transform
+        
+        public Update():void
+            // Store the position of the camera.
+            mutable newPosition:Vector3 = transform.position
+            
+            // Set the x value of the stored position to that of the bird.
+            newPosition.x = projectile.position.x
+            
+            // Clamp the x value of the stored position between the left and right bounds.
+            newPosition.x = Mathf.Clamp(newPosition.x, farLeft.position.x, farRight.position.x);
+            
+            // Set the camera's position to this stored position.
+            transform.position = newPosition

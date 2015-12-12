@@ -1,0 +1,37 @@
+#pragma indent
+
+using System
+using UnityEngine
+
+namespace HelloWorld 
+
+    public class TouchManager : MonoBehaviour 
+    
+        static mutable _instance:TouchManager
+        
+        public static Instance:TouchManager
+            get
+                when (_instance == null)
+                    _instance = GameObject.FindObjectOfType():TouchManager;
+                _instance;
+                
+        public delegate TouchDelegate(eventData:Touch):void
+        public static event OnTouchDown: TouchDelegate;
+        public static event OnTouchUp: TouchDelegate;
+        public static event OnTouchDrag: TouchDelegate;
+        
+        public Update():void
+        
+            when (Input.touchCount > 0)
+            
+                def touch = Input.GetTouch(0)
+                
+                match(touch.phase)
+                    | TouchPhase.Began      when (OnTouchDown != null) => OnTouchDown(touch)
+                    | TouchPhase.Ended      when (OnTouchUp != null) => OnTouchUp(touch)
+                    | TouchPhase.Canceled   when (OnTouchUp != null) => OnTouchUp(touch)
+                    | TouchPhase.Moved      when (OnTouchDrag != null) => OnTouchDrag(touch)
+                        
+                        
+        
+        
